@@ -37,8 +37,11 @@ dependencies:
   # Http client
   dio: ^5.3.0
 
+  json_annotation: ^4.8.1
+
   # Logger for Dart applications
   loggy: ^2.0.3
+  flutter_loggy_dio: ^3.0.1
 
   # Flutter plugin for SQLite
   sqflite: ^2.2.8+4
@@ -53,6 +56,10 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+  build_runner: ^2.4.6
+
+  json_serializable: ^6.7.1
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
