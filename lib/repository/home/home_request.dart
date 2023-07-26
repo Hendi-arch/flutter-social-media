@@ -1,5 +1,5 @@
 import 'package:flutter_social_media/app/app_endpoint.dart';
-import 'package:flutter_social_media/entity/base_entity.dart';
+import 'package:flutter_social_media/entity/pagination_entity.dart';
 import 'package:flutter_social_media/entity/user/user_entity.dart';
 import 'package:flutter_social_media/service/restful/request_interface.dart';
 
@@ -12,6 +12,6 @@ class GetListUserRequest extends RequestInterface {
   }
 
   @override
-  Future<BaseEntity<UserEntity>> response(res) async =>
-      BaseEntity.fromJson(res);
+  Future<PaginationEntity<UserEntity>> response(res) async =>
+      PaginationEntity.fromJson(res);
 }

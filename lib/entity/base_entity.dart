@@ -1,67 +1,29 @@
-import 'package:flutter_social_media/app/app_exception.dart';
-import 'package:flutter_social_media/entity/post/post_entity.dart';
-import 'package:flutter_social_media/entity/user/user_entity.dart';
-import 'package:json_annotation/json_annotation.dart';
+import 'package:flutter_social_media/app/app_state.dart';
 
-part 'base_entity.g.dart';
-
-@JsonSerializable(createToJson: false)
-class BaseEntity<T> {
-  final int total;
-  final int page;
-  final int limit;
-
-  @JsonKey(fromJson: _dataFromJson)
-  final List<T> data;
-
-  const BaseEntity({
-    required this.total,
-    required this.page,
-    required this.limit,
-    required this.data,
-  });
-
-  factory BaseEntity.fromJson(Map<String, dynamic> json) =>
-      _$BaseEntityFromJson(json);
-
-  /// Decodes [json] by "inspecting" its contents.
-  static T _dataFromJson<T>(Object json) {
-    if (json is Map<String, dynamic> && json.containsKey('error')) {
-      String error = json['error'];
-      switch (error) {
-        case 'RESOURCE_NOT_FOUND':
-          throw ResourceNotFoundException(error);
-        case 'APP_ID_NOT_EXIST':
-          throw AppIdNotExistException(error);
-        case 'APP_ID_MISSING':
-          throw AppIdMissingException(error);
-        case 'PARAMS_NOT_VALID':
-          throw ParamsNotValidException(error);
-        case 'BODY_NOT_VALID':
-          throw BodyNotValidException(error);
-        case 'PATH_NOT_FOUND':
-          throw PathNotFoundException(error);
-        case 'SERVER_ERROR':
-          throw ServerErrorException(error);
-        default:
-          throw Exception(error);
-      }
+extension BaseEntityViewBuilderExtension<T> on BaseEntity<T> {
+  R when<R>({
+    required R Function(T data) data,
+    required R Function(Object error) error,
+    required R Function() loading,
+  }) {
+    if (state == AppState.loading) {
+      return loading();
     }
 
-    if (T is UserEntity) {
-      return (json as List<Map<String, dynamic>>)
-          .map((e) => UserEntity.fromJson(e))
-          .toList() as T;
-    } else if (T is PostEntity) {
-      return (json as List<Map<String, dynamic>>)
-          .map((e) => PostEntity.fromJson(e))
-          .toList() as T;
+    if (state != AppState.ok && state != AppState.loading) {
+      return error(state.value);
     }
 
-    throw ArgumentError.value(
-      json,
-      'json',
-      'Cannot convert the provided data.',
-    );
+    return data(this.data as T);
   }
+}
+
+class BaseEntity<T> {
+  AppState state;
+  T? data;
+
+  BaseEntity({
+    required this.state,
+    this.data,
+  });
 }

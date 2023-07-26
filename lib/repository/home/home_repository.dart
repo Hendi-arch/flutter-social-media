@@ -1,5 +1,8 @@
 import 'package:flutter_social_media/app/app_exception.dart';
+import 'package:flutter_social_media/app/app_state.dart';
 import 'package:flutter_social_media/entity/base_entity.dart';
+import 'package:flutter_social_media/entity/pagination_entity.dart';
+import 'package:flutter_social_media/entity/user/user_entity.dart';
 import 'package:flutter_social_media/repository/home/home_request.dart';
 import 'package:flutter_social_media/service/http/http_client_service.dart';
 import 'package:flutter_social_media/service/restful/request_interface.dart';
@@ -11,34 +14,36 @@ class HomeRepository {
       : client = client ?? HttpClientService(interface: RestfulServiceImpl());
   final HttpClientService client;
 
-  Future<BaseEntity> getListUser() => _getData(
-        request: GetListUserRequest(),
-        builder: (data) => data,
-      );
+  Future<BaseEntity<PaginationEntity<UserEntity>>> getListUser() async {
+    final response = await _getData<PaginationEntity<UserEntity>>(
+      request: GetListUserRequest(),
+    );
+    return BaseEntity<PaginationEntity<UserEntity>>(
+      data: response.data,
+      state: AppState.ok,
+    );
+  }
 
-  Future<T> _getData<T>({
-    required RequestInterface request,
-    required T Function(dynamic data) builder,
-  }) async {
+  Future<BaseEntity<T>> _getData<T>({required RequestInterface request}) async {
     try {
-      final response = await client.send<T>(request);
-      return response;
+      final response = await client.send(request);
+      return BaseEntity<T>(data: response, state: AppState.ok);
     } on ResourceNotFoundException catch (e) {
-      throw ResourceNotFoundException(e.toString());
+      return BaseEntity<T>(state: AppState.fromString(e.error));
     } on AppIdNotExistException catch (e) {
-      throw AppIdNotExistException(e.toString());
+      return BaseEntity<T>(state: AppState.fromString(e.error));
     } on AppIdMissingException catch (e) {
-      throw AppIdMissingException(e.toString());
+      return BaseEntity<T>(state: AppState.fromString(e.error));
     } on ParamsNotValidException catch (e) {
-      throw ParamsNotValidException(e.toString());
+      return BaseEntity<T>(state: AppState.fromString(e.error));
     } on BodyNotValidException catch (e) {
-      throw BodyNotValidException(e.toString());
+      return BaseEntity<T>(state: AppState.fromString(e.error));
     } on PathNotFoundException catch (e) {
-      throw PathNotFoundException(e.toString());
+      return BaseEntity<T>(state: AppState.fromString(e.error));
     } on ServerErrorException catch (e) {
-      throw ServerErrorException(e.toString());
+      return BaseEntity<T>(state: AppState.fromString(e.error));
     } catch (error) {
-      throw Exception(error.toString());
+      return BaseEntity<T>(state: AppState.fromString(error.toString()));
     }
   }
 }
