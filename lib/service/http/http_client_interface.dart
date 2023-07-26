@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:dio/dio.dart';
 
-abstract class RestfulInterface {
+abstract class HttpClientInterface {
   Future<dynamic> get({
     required String uri,
     Map<String, dynamic>? queryParameters,

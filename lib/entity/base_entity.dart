@@ -27,7 +27,25 @@ class BaseEntity<T> {
   /// Decodes [json] by "inspecting" its contents.
   static T _dataFromJson<T>(Object json) {
     if (json is Map<String, dynamic> && json.containsKey('error')) {
-      throw AppException(json['error']);
+      String error = json['error'];
+      switch (error) {
+        case 'RESOURCE_NOT_FOUND':
+          throw ResourceNotFoundException(error);
+        case 'APP_ID_NOT_EXIST':
+          throw AppIdNotExistException(error);
+        case 'APP_ID_MISSING':
+          throw AppIdMissingException(error);
+        case 'PARAMS_NOT_VALID':
+          throw ParamsNotValidException(error);
+        case 'BODY_NOT_VALID':
+          throw BodyNotValidException(error);
+        case 'PATH_NOT_FOUND':
+          throw PathNotFoundException(error);
+        case 'SERVER_ERROR':
+          throw ServerErrorException(error);
+        default:
+          throw Exception(error);
+      }
     }
 
     if (T is UserEntity) {

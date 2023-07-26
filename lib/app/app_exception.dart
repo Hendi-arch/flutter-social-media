@@ -1,13 +1,3 @@
-/// Applicable for all requests.
-class AppException implements Exception {
-  final String error;
-
-  AppException(this.error);
-
-  @override
-  String toString() => error;
-}
-
 /// Applicable for all requests that has {id} URL param.
 /// Mean that item that was requested(for get, update, delete) is not found.
 /// Works correctly if you try to create a post for user that not exist or deleted.

@@ -1,13 +1,13 @@
+import 'package:flutter_social_media/service/http/http_client_interface.dart';
 import 'package:flutter_social_media/service/restful/request_interface.dart';
-import 'package:flutter_social_media/service/restful/restful_interface.dart';
 
-class RestfulService {
-  late RestfulInterface _restfulInterface;
+class HttpClientService {
+  late HttpClientInterface _clientInterface;
 
-  RestfulService({
-    required RestfulInterface interface,
+  HttpClientService({
+    required HttpClientInterface interface,
   }) {
-    _restfulInterface = interface;
+    _clientInterface = interface;
   }
 
   Future<T> send<T>(RequestInterface request) async {
@@ -17,7 +17,7 @@ class RestfulService {
 
     switch (request.method) {
       case RestfulMethod.get:
-        json = await _restfulInterface.get(
+        json = await _clientInterface.get(
           uri: url,
           options: request.options,
           cancelToken: request.cancelToken,
@@ -26,7 +26,7 @@ class RestfulService {
         );
         break;
       case RestfulMethod.post:
-        json = await _restfulInterface.post(
+        json = await _clientInterface.post(
           uri: url,
           options: request.options,
           cancelToken: request.cancelToken,

@@ -5,12 +5,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_loggy_dio/flutter_loggy_dio.dart';
 import 'package:flutter_social_media/app/app_endpoint.dart';
 import 'package:flutter_social_media/app/app_secret.dart';
-import 'package:flutter_social_media/service/restful/restful_interface.dart';
+import 'package:flutter_social_media/service/http/http_client_interface.dart';
 
 const _defaultConnectTimeout = Duration.millisecondsPerMinute;
 const _defaultReceiveTimeout = Duration.millisecondsPerMinute;
 
-class RestfulServiceImpl extends RestfulInterface {
+class RestfulServiceImpl extends HttpClientInterface {
   final Dio _dio = Dio();
   final List<Interceptor> interceptors = [];
 
