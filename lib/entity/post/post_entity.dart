@@ -11,9 +11,9 @@ class PostEntity {
   String text;
   String image;
   int likes;
-  String link;
+  String? link;
   List<String> tags;
-  DateTime publishDate;
+  DateTime? publishDate;
   UserEntity owner;
 
   PostEntity({

@@ -7,9 +7,10 @@ import 'package:flutter_social_media/repository/home/home_request.dart';
 import 'package:flutter_social_media/service/http/http_client_service.dart';
 import 'package:flutter_social_media/service/restful/request_interface.dart';
 import 'package:flutter_social_media/service/restful/restful_service_impl.dart';
+import 'package:loggy/loggy.dart';
 
 /// Home Repository using the http client. Calls API methods and parses responses.
-class HomeRepository {
+class HomeRepository with NetworkLoggy {
   HomeRepository({HttpClientService? client})
       : client = client ?? HttpClientService(interface: RestfulServiceImpl());
   final HttpClientService client;
@@ -20,13 +21,13 @@ class HomeRepository {
     );
     return BaseEntity<PaginationEntity<UserEntity>>(
       data: response.data,
-      state: AppState.ok,
+      state: response.state,
     );
   }
 
   Future<BaseEntity<T>> _getData<T>({required RequestInterface request}) async {
     try {
-      final response = await client.send(request);
+      final response = await client.send<T>(request);
       return BaseEntity<T>(data: response, state: AppState.ok);
     } on ResourceNotFoundException catch (e) {
       return BaseEntity<T>(state: AppState.fromString(e.error));
@@ -42,7 +43,8 @@ class HomeRepository {
       return BaseEntity<T>(state: AppState.fromString(e.error));
     } on ServerErrorException catch (e) {
       return BaseEntity<T>(state: AppState.fromString(e.error));
-    } catch (error) {
+    } catch (error, trace) {
+      loggy.error('${AppState.unknown.value} - $error', error, trace);
       return BaseEntity<T>(state: AppState.fromString(error.toString()));
     }
   }

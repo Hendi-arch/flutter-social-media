@@ -11,15 +11,15 @@ class UserEntity {
   String title;
   String firstName;
   String lastName;
-  String gender;
-  String email;
-  DateTime dateOfBirth;
-  DateTime registerDate;
-  String phone;
+  String? gender;
+  String? email;
+  DateTime? dateOfBirth;
+  DateTime? registerDate;
+  String? phone;
   String picture;
 
   @JsonKey(name: 'location')
-  UserLocationEntity userLocation;
+  UserLocationEntity? userLocation;
 
   UserEntity({
     required this.id,

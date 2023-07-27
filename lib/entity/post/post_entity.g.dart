@@ -11,10 +11,10 @@ PostEntity _$PostEntityFromJson(Map<String, dynamic> json) => PostEntity(
       text: json['text'] as String,
       image: json['image'] as String,
       likes: json['likes'] as int,
-      link: json['link'] as String,
+      link: json['link'] as String?,
       tags: (json['tags'] as List<dynamic>).map((e) => e as String).toList(),
       publishDate: const DateTimeAttributeConverter()
-          .fromJson(json['publishDate'] as String),
+          .fromJson(json['publishDate'] as String?),
       owner: UserEntity.fromJson(json['owner'] as Map<String, dynamic>),
     );
 

@@ -48,12 +48,18 @@ class PaginationEntity<T> {
       }
     }
 
-    if (json is List<Map<String, dynamic>>) {
-      return json
-          .map((e) => e.containsKey('email')
-              ? UserEntity.fromJson(e)
-              : PostEntity.fromJson(e))
-          .toList() as T;
+    if (json is List) {
+      bool isUserEntity = json.any((element) =>
+          (element as Map<String, dynamic>).containsKey('firstName'));
+      if (isUserEntity) {
+        return json
+            .map((e) => UserEntity.fromJson(e as Map<String, dynamic>))
+            .toList() as T;
+      } else {
+        return json
+            .map((e) => PostEntity.fromJson(e as Map<String, dynamic>))
+            .toList() as T;
+      }
     }
 
     throw ArgumentError.value(

@@ -10,7 +10,9 @@ extension BaseEntityViewBuilderExtension<T> on BaseEntity<T> {
       return loading();
     }
 
-    if (state != AppState.ok && state != AppState.loading) {
+    if (state != AppState.ok &&
+        state != AppState.loading &&
+        this.data != null) {
       return error(state.value);
     }
 

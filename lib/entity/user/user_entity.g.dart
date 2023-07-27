@@ -11,16 +11,18 @@ UserEntity _$UserEntityFromJson(Map<String, dynamic> json) => UserEntity(
       title: json['title'] as String,
       firstName: json['firstName'] as String,
       lastName: json['lastName'] as String,
-      gender: json['gender'] as String,
-      email: json['email'] as String,
+      gender: json['gender'] as String?,
+      email: json['email'] as String?,
       dateOfBirth: const DateTimeAttributeConverter()
-          .fromJson(json['dateOfBirth'] as String),
+          .fromJson(json['dateOfBirth'] as String?),
       registerDate: const DateTimeAttributeConverter()
-          .fromJson(json['registerDate'] as String),
-      phone: json['phone'] as String,
+          .fromJson(json['registerDate'] as String?),
+      phone: json['phone'] as String?,
       picture: json['picture'] as String,
-      userLocation:
-          UserLocationEntity.fromJson(json['location'] as Map<String, dynamic>),
+      userLocation: json['location'] == null
+          ? null
+          : UserLocationEntity.fromJson(
+              json['location'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$UserEntityToJson(UserEntity instance) =>

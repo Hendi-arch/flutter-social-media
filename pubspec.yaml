@@ -41,7 +41,6 @@ dependencies:
 
   # Logger for Dart applications
   loggy: ^2.0.3
-  flutter_loggy_dio: ^3.0.1
 
   # Flutter plugin for SQLite
   sqflite: ^2.2.8+4
