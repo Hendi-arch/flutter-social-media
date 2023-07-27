@@ -11,5 +11,5 @@ PaginationEntity<T> _$PaginationEntityFromJson<T>(Map<String, dynamic> json) =>
       total: json['total'] as int,
       page: json['page'] as int,
       limit: json['limit'] as int,
-      data: PaginationEntity._dataFromJson(json['data'] as Object),
+      listData: PaginationEntity._dataFromJson(json['data'] as Object),
     );

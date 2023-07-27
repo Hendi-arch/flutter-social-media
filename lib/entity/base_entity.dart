@@ -1,13 +1,20 @@
 import 'package:flutter_social_media/app/app_state.dart';
 
-extension BaseEntityViewBuilderExtension<T> on BaseEntity<T> {
+extension BaseEntityExtension<T> on BaseEntity<T> {
   R when<R>({
+    bool skipLoadingOnRefresh = true,
     required R Function(T data) data,
     required R Function(Object error) error,
-    required R Function() loading,
+    R Function()? loading,
   }) {
     if (state == AppState.loading) {
-      return loading();
+      bool skip;
+      if (this.data != null) {
+        skip = skipLoadingOnRefresh;
+      } else {
+        skip = false;
+      }
+      if (!skip) return loading!();
     }
 
     if (state != AppState.ok &&
@@ -17,6 +24,10 @@ extension BaseEntityViewBuilderExtension<T> on BaseEntity<T> {
     }
 
     return data(this.data as T);
+  }
+
+  void setStateLoading() {
+    state = AppState.loading;
   }
 }
 

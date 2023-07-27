@@ -9,6 +9,8 @@ class GetListUserRequest extends RequestInterface {
 
   GetListUserRequest({int page = 0, int limit = 20}) : super() {
     url = AppEndpoint.getListUser;
+    queryParameters["page"] = page;
+    queryParameters["limit"] = limit;
   }
 
   @override

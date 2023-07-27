@@ -11,14 +11,14 @@ class PaginationEntity<T> {
   int page;
   int limit;
 
-  @JsonKey(fromJson: _dataFromJson)
-  List<T> data;
+  @JsonKey(fromJson: _dataFromJson, name: 'data')
+  List<T> listData;
 
   PaginationEntity({
     required this.total,
     required this.page,
     required this.limit,
-    required this.data,
+    required this.listData,
   });
 
   factory PaginationEntity.fromJson(Map<String, dynamic> json) =>

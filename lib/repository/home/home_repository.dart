@@ -15,9 +15,10 @@ class HomeRepository with NetworkLoggy {
       : client = client ?? HttpClientService(interface: RestfulServiceImpl());
   final HttpClientService client;
 
-  Future<BaseEntity<PaginationEntity<UserEntity>>> getListUser() async {
+  Future<BaseEntity<PaginationEntity<UserEntity>>> getListUser(
+      {int page = 0, int limit = 20}) async {
     final response = await _getData<PaginationEntity<UserEntity>>(
-      request: GetListUserRequest(),
+      request: GetListUserRequest(page: page, limit: limit),
     );
     return BaseEntity<PaginationEntity<UserEntity>>(
       data: response.data,
