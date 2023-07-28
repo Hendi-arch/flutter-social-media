@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter_social_media/app/app_exception.dart';
 import 'package:flutter_social_media/app/app_state.dart';
 import 'package:flutter_social_media/entity/base_entity.dart';
@@ -20,33 +21,44 @@ class HomeRepository with NetworkLoggy {
     final response = await _getData<PaginationEntity<UserEntity>>(
       request: GetListUserRequest(page: page, limit: limit),
     );
+
+    response.data ??= PaginationEntity<UserEntity>.empty();
+    response.data!.listData ??= [];
     return BaseEntity<PaginationEntity<UserEntity>>(
       data: response.data,
       state: response.state,
+      stateDescription: response.stateDescription,
     );
   }
 
   Future<BaseEntity<T>> _getData<T>({required RequestInterface request}) async {
     try {
       final response = await client.send<T>(request);
-      return BaseEntity<T>(data: response, state: AppState.ok);
+      return BaseEntity<T>.ok(data: response);
     } on ResourceNotFoundException catch (e) {
-      return BaseEntity<T>(state: AppState.fromString(e.error));
+      return BaseEntity.resourceNotFound(stateDescription: e.toString());
     } on AppIdNotExistException catch (e) {
-      return BaseEntity<T>(state: AppState.fromString(e.error));
+      return BaseEntity.appIdNotExist(stateDescription: e.toString());
     } on AppIdMissingException catch (e) {
-      return BaseEntity<T>(state: AppState.fromString(e.error));
+      return BaseEntity.appIdMissing(stateDescription: e.toString());
     } on ParamsNotValidException catch (e) {
-      return BaseEntity<T>(state: AppState.fromString(e.error));
+      return BaseEntity.paramsNotValid(stateDescription: e.toString());
     } on BodyNotValidException catch (e) {
-      return BaseEntity<T>(state: AppState.fromString(e.error));
+      return BaseEntity.bodyNotValid(stateDescription: e.toString());
     } on PathNotFoundException catch (e) {
-      return BaseEntity<T>(state: AppState.fromString(e.error));
+      return BaseEntity.pathNotFound(stateDescription: e.toString());
     } on ServerErrorException catch (e) {
-      return BaseEntity<T>(state: AppState.fromString(e.error));
+      return BaseEntity.serverError(stateDescription: e.toString());
+    } on DioException catch (e) {
+      loggy.error(e.message, e.error, e.stackTrace);
+      return BaseEntity.unknown(
+        stateDescription: '${e.type.name.toUpperCase()} - ${e.error ?? ''}',
+      );
     } catch (error, trace) {
       loggy.error('${AppState.unknown.value} - $error', error, trace);
-      return BaseEntity<T>(state: AppState.fromString(error.toString()));
+      return BaseEntity.unknown(
+        stateDescription: '${AppState.unknown.value} - $error',
+      );
     }
   }
 }

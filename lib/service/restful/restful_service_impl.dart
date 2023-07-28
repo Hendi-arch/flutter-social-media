@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_social_media/app/app_endpoint.dart';
+import 'package:flutter_social_media/app/app_exception.dart';
 import 'package:flutter_social_media/app/app_secret.dart';
 import 'package:flutter_social_media/service/http/http_client_interface.dart';
 
@@ -40,14 +41,36 @@ class RestfulServiceImpl extends HttpClientInterface {
     CancelToken? cancelToken,
     ProgressCallback? onReceiveProgress,
   }) async {
-    Response response = await _dio.get(
-      uri,
-      queryParameters: queryParameters,
-      options: options,
-      cancelToken: cancelToken,
-      onReceiveProgress: onReceiveProgress,
-    );
-    return response.data;
+    try {
+      Response response = await _dio.get(
+        uri,
+        queryParameters: queryParameters,
+        options: options,
+        cancelToken: cancelToken,
+        onReceiveProgress: onReceiveProgress,
+      );
+      return response.data;
+    } on DioException catch (e) {
+      String error = e.response?.data?['error'] ?? '';
+      switch (error) {
+        case 'RESOURCE_NOT_FOUND':
+          throw ResourceNotFoundException(error);
+        case 'APP_ID_NOT_EXIST':
+          throw AppIdNotExistException(error);
+        case 'APP_ID_MISSING':
+          throw AppIdMissingException(error);
+        case 'PARAMS_NOT_VALID':
+          throw ParamsNotValidException(error);
+        case 'BODY_NOT_VALID':
+          throw BodyNotValidException(error);
+        case 'PATH_NOT_FOUND':
+          throw PathNotFoundException(error);
+        case 'SERVER_ERROR':
+          throw ServerErrorException(error);
+        default:
+          rethrow;
+      }
+    }
   }
 
   @override
@@ -60,15 +83,37 @@ class RestfulServiceImpl extends HttpClientInterface {
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
   }) async {
-    Response response = await _dio.post(
-      uri,
-      data: data,
-      queryParameters: queryParameters,
-      options: options,
-      cancelToken: cancelToken,
-      onSendProgress: onSendProgress,
-      onReceiveProgress: onReceiveProgress,
-    );
-    return response.data;
+    try {
+      Response response = await _dio.post(
+        uri,
+        data: data,
+        queryParameters: queryParameters,
+        options: options,
+        cancelToken: cancelToken,
+        onSendProgress: onSendProgress,
+        onReceiveProgress: onReceiveProgress,
+      );
+      return response.data;
+    } on DioException catch (e) {
+      String error = e.response?.data?['error'] ?? '';
+      switch (error) {
+        case 'RESOURCE_NOT_FOUND':
+          throw ResourceNotFoundException(error);
+        case 'APP_ID_NOT_EXIST':
+          throw AppIdNotExistException(error);
+        case 'APP_ID_MISSING':
+          throw AppIdMissingException(error);
+        case 'PARAMS_NOT_VALID':
+          throw ParamsNotValidException(error);
+        case 'BODY_NOT_VALID':
+          throw BodyNotValidException(error);
+        case 'PATH_NOT_FOUND':
+          throw PathNotFoundException(error);
+        case 'SERVER_ERROR':
+          throw ServerErrorException(error);
+        default:
+          rethrow;
+      }
+    }
   }
 }

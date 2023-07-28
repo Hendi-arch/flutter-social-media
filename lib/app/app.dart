@@ -4,6 +4,7 @@ import 'package:flutter_social_media/app/app_navigation.dart';
 import 'package:flutter_social_media/app/app_routes.dart';
 import 'package:flutter_social_media/app/app_themes.dart';
 import 'package:flutter_social_media/feature/home/home_notifier.dart';
+import 'package:flutter_social_media/feature/startup/startup_notifier.dart';
 import 'package:provider/provider.dart';
 
 class App extends StatelessWidget {
@@ -13,7 +14,8 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => HomeNotifier())
+        ChangeNotifierProvider(create: (context) => StartupNotifier()),
+        ChangeNotifierProvider(create: (context) => HomeNotifier()),
       ],
       child: ScreenUtilInit(
         minTextAdapt: true,

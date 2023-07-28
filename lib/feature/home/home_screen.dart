@@ -34,10 +34,10 @@ class _HomeScreenState extends State<HomeScreen> {
         data: (snapshot) {
           return ListView.builder(
             controller: _scrollController,
-            itemCount: snapshot.listData.length,
+            itemCount: snapshot.listData!.length,
             padding: const EdgeInsets.all(15),
             itemBuilder: (context, index) {
-              final userData = snapshot.listData[index];
+              final userData = snapshot.listData![index];
               return ListTile(
                 title: Text(userData.id),
                 subtitle: Text('${userData.firstName} ${userData.lastName}'),
@@ -45,7 +45,10 @@ class _HomeScreenState extends State<HomeScreen> {
             },
           );
         },
-        error: (error) => Center(child: Text(error.toString())),
+        error: (error) => Center(child: Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: Text(error.stateDescription),
+        )),
         loading: () => const Center(child: CircularProgressIndicator()),
       ),
     );

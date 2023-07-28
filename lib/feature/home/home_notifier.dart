@@ -11,7 +11,7 @@ class HomeNotifier with ChangeNotifier {
 
   // Class Attributes
   BaseEntity<PaginationEntity<UserEntity>> _baseDataEntity =
-      BaseEntity<PaginationEntity<UserEntity>>(state: AppState.loading);
+      BaseEntity<PaginationEntity<UserEntity>>.loading();
 
   int _page = 0;
   final int _limit = 20;
@@ -28,7 +28,7 @@ class HomeNotifier with ChangeNotifier {
         await _homeRepository.getListUser(page: _page, limit: _limit);
     userData.when(
       data: (res) {
-        if (res.listData.isNotEmpty) _page++;
+        if (res.listData!.isNotEmpty) _page++;
         if (_baseDataEntity.data == null) {
           _baseDataEntity = userData;
         } else {
@@ -36,12 +36,13 @@ class HomeNotifier with ChangeNotifier {
           _baseDataEntity.data?.listData = [
                 ..._baseDataEntity.data?.listData ?? [] as List<UserEntity>
               ] +
-              res.listData;
+              res.listData!;
         }
         notifyListeners();
       },
       error: (error) {
-        _baseDataEntity.state = userData.state;
+        _baseDataEntity.state = error.state;
+        _baseDataEntity.stateDescription = error.stateDescription;
         notifyListeners();
       },
     );
