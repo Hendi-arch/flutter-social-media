@@ -24,6 +24,7 @@ class HomeRepository with NetworkLoggy {
 
     response.data ??= PaginationEntity<UserEntity>.empty();
     response.data!.listData ??= [];
+    response.data!.isLastPage = response.data!.listData!.isEmpty;
     return BaseEntity<PaginationEntity<UserEntity>>(
       data: response.data,
       state: response.state,

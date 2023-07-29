@@ -31,9 +31,11 @@ class HomeNotifier with ChangeNotifier {
         if (res.listData!.isNotEmpty) _page++;
         if (_baseDataEntity.data == null) {
           _baseDataEntity = userData;
+          _baseDataEntity.data!.isLastPage = res.isLastPage;
         } else {
+          _baseDataEntity.data!.isLastPage = res.isLastPage;
           _baseDataEntity.state = userData.state;
-          _baseDataEntity.data?.listData = [
+          _baseDataEntity.data!.listData = [
                 ..._baseDataEntity.data?.listData ?? [] as List<UserEntity>
               ] +
               res.listData!;
@@ -51,7 +53,15 @@ class HomeNotifier with ChangeNotifier {
   Future<void> reload() async {
     _resetPaginationAttributes();
     _setState();
-    _baseDataEntity = await _homeRepository.getListUser();
+    final userData = await _homeRepository.getListUser();
+    _baseDataEntity = userData;
+    userData.when(
+      data: (res) {
+        if (res.listData!.isNotEmpty) _page++;
+        _baseDataEntity.data!.isLastPage = res.isLastPage;
+      },
+      error: (error) {},
+    );
     notifyListeners();
   }
 

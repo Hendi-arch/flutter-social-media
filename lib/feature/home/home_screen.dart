@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_social_media/entity/base_entity.dart';
 import 'package:flutter_social_media/feature/home/home_notifier.dart';
+import 'package:flutter_social_media/shared/components/list_screen_shimmer_loading.dart';
+import 'package:flutter_social_media/shared/components/list_tile_shimmer_component.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -12,6 +14,8 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final ScrollController _scrollController = ScrollController();
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
+      GlobalKey<RefreshIndicatorState>();
 
   @override
   void initState() {
@@ -30,26 +34,43 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         title: const Text('Home Screen'),
       ),
-      body: baseDataEntity.when(
-        data: (snapshot) {
-          return ListView.builder(
-            controller: _scrollController,
-            itemCount: snapshot.listData!.length,
-            padding: const EdgeInsets.all(15),
-            itemBuilder: (context, index) {
-              final userData = snapshot.listData![index];
-              return ListTile(
-                title: Text(userData.id),
-                subtitle: Text('${userData.firstName} ${userData.lastName}'),
-              );
-            },
-          );
-        },
-        error: (error) => Center(child: Padding(
-          padding: const EdgeInsets.all(15.0),
-          child: Text(error.stateDescription),
-        )),
-        loading: () => const Center(child: CircularProgressIndicator()),
+      body: RefreshIndicator(
+        key: _refreshIndicatorKey,
+        onRefresh: () => context.read<HomeNotifier>().reload(),
+        child: baseDataEntity.when(
+          data: (snapshot) {
+            return ListView.builder(
+              controller: _scrollController,
+              itemCount: snapshot.listData!.length + 1,
+              padding: const EdgeInsets.all(15),
+              itemBuilder: (context, index) {
+                if (index == snapshot.listData!.length) {
+                  if (snapshot.isLastPage) {
+                    return const SizedBox.shrink();
+                  } else {
+                    return const ListTileShimmerComponent();
+                  }
+                }
+      
+                final userData = snapshot.listData![index];
+                return ListTile(
+                  leading: CircleAvatar(
+                    backgroundImage: NetworkImage(userData.picture),
+                  ),
+                  title: Text(userData.title),
+                  subtitle: Text('${userData.firstName} ${userData.lastName}'),
+                );
+              },
+            );
+          },
+          error: (error) => Center(
+            child: Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Text(error.stateDescription),
+            ),
+          ),
+          loading: () => const ListScreenShimmerComponent(),
+        ),
       ),
     );
   }

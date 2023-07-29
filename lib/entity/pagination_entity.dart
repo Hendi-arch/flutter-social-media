@@ -10,6 +10,9 @@ class PaginationEntity<T> {
   int page;
   int limit;
 
+  @JsonKey(includeFromJson: false)
+  bool isLastPage;
+
   @JsonKey(fromJson: _dataFromJson, name: 'data')
   List<T>? listData;
 
@@ -18,13 +21,15 @@ class PaginationEntity<T> {
     required this.page,
     required this.limit,
     required this.listData,
+    this.isLastPage = false,
   });
 
   PaginationEntity.empty()
       : total = 0,
         page = 0,
         limit = 20,
-        listData = [];
+        listData = [],
+        isLastPage = false;
 
   factory PaginationEntity.fromJson(Map<String, dynamic> json) =>
       _$PaginationEntityFromJson(json);
