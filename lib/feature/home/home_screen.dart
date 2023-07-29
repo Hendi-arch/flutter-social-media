@@ -30,47 +30,42 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final baseDataEntity = context.watch<HomeNotifier>().baseDataEntity;
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Home Screen'),
-      ),
-      body: RefreshIndicator(
-        key: _refreshIndicatorKey,
-        onRefresh: () => context.read<HomeNotifier>().reload(),
-        child: baseDataEntity.when(
-          data: (snapshot) {
-            return ListView.builder(
-              controller: _scrollController,
-              itemCount: snapshot.listData!.length + 1,
-              padding: const EdgeInsets.all(15),
-              itemBuilder: (context, index) {
-                if (index == snapshot.listData!.length) {
-                  if (snapshot.isLastPage) {
-                    return const SizedBox.shrink();
-                  } else {
-                    return const ListTileShimmerComponent();
-                  }
+    return RefreshIndicator(
+      key: _refreshIndicatorKey,
+      onRefresh: () => context.read<HomeNotifier>().reload(),
+      child: baseDataEntity.when(
+        data: (snapshot) {
+          return ListView.builder(
+            controller: _scrollController,
+            itemCount: snapshot.listData!.length + 1,
+            padding: const EdgeInsets.all(15),
+            itemBuilder: (context, index) {
+              if (index == snapshot.listData!.length) {
+                if (snapshot.isLastPage) {
+                  return const SizedBox.shrink();
+                } else {
+                  return const ListTileShimmerComponent();
                 }
-      
-                final userData = snapshot.listData![index];
-                return ListTile(
-                  leading: CircleAvatar(
-                    backgroundImage: NetworkImage(userData.picture),
-                  ),
-                  title: Text(userData.title),
-                  subtitle: Text('${userData.firstName} ${userData.lastName}'),
-                );
-              },
-            );
-          },
-          error: (error) => Center(
-            child: Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: Text(error.stateDescription),
-            ),
+              }
+
+              final userData = snapshot.listData![index];
+              return ListTile(
+                leading: CircleAvatar(
+                  backgroundImage: NetworkImage(userData.picture),
+                ),
+                title: Text(userData.title),
+                subtitle: Text('${userData.firstName} ${userData.lastName}'),
+              );
+            },
+          );
+        },
+        error: (error) => Center(
+          child: Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: Text(error.stateDescription),
           ),
-          loading: () => const ListScreenShimmerComponent(),
         ),
+        loading: () => const ListScreenShimmerComponent(),
       ),
     );
   }
