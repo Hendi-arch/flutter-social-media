@@ -20,10 +20,6 @@ class _MainScreenState extends State<MainScreen> {
       'title': 'Posts',
       'feature': const FeedScreen(key: ValueKey(1)),
     },
-    {
-      'title': 'Your Like',
-      'feature': Container(color: Colors.blue, key: const ValueKey(2)),
-    },
   ];
 
   void _onItemTapped(int index) {
@@ -60,10 +56,6 @@ class _MainScreenState extends State<MainScreen> {
           BottomNavigationBarItem(
             icon: Icon(Icons.newspaper),
             label: 'Posts',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.favorite),
-            label: 'Your Like',
           ),
         ],
         currentIndex: _selectedIndex,
