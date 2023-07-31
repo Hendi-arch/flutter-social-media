@@ -35,6 +35,13 @@ class UserEntity {
     required this.userLocation,
   });
 
+  UserEntity.empty()
+      : id = '',
+        title = '',
+        firstName = '',
+        lastName = '',
+        picture = '';
+
   factory UserEntity.fromJson(Map<String, dynamic> json) =>
       _$UserEntityFromJson(json);
 

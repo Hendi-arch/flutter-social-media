@@ -56,6 +56,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 title: Text(userData.title),
                 subtitle: Text('${userData.firstName} ${userData.lastName}'),
+                onTap: () =>
+                    context.read<HomeNotifier>().toProfile(userId: userData.id),
               );
             },
           );
@@ -66,7 +68,8 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Text(error.stateDescription),
           ),
         ),
-        loading: () => const ListScreenShimmerComponent(featureShimmerComponent: UserShimmerComponent()),
+        loading: () => const ListScreenShimmerComponent(
+            featureShimmerComponent: UserShimmerComponent()),
       ),
     );
   }

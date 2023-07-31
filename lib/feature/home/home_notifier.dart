@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_social_media/app/app_navigation.dart';
+import 'package:flutter_social_media/app/app_routes.dart';
 import 'package:flutter_social_media/app/app_state.dart';
 import 'package:flutter_social_media/entity/base_entity.dart';
 import 'package:flutter_social_media/entity/pagination_entity.dart';
 import 'package:flutter_social_media/entity/user/user_entity.dart';
 import 'package:flutter_social_media/repository/home/home_repository.dart';
 
-class HomeNotifier with ChangeNotifier {
+class HomeNotifier with ChangeNotifier, AppNavigationMixin {
   // Class Repositories
   final HomeRepository _homeRepository = HomeRepository();
 
@@ -71,6 +73,10 @@ class HomeNotifier with ChangeNotifier {
         !isBusy) {
       load();
     }
+  }
+
+  void toProfile({required String userId}) {
+    goNamed(route: AppRoutes.profile, arguments: userId);
   }
 
   void _setState() {

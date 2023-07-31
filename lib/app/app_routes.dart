@@ -24,7 +24,9 @@ class AppRoutes {
       case favorite:
         return MaterialPageRoute(builder: (_) => const FavoriteScreen());
       case profile:
-        return MaterialPageRoute(builder: (_) => const ProfileScreen());
+        return MaterialPageRoute(
+            builder: (_) =>
+                ProfileScreen(userId: settings.arguments as String));
     }
 
     return MaterialPageRoute(builder: (_) => const NotFoundScreen());

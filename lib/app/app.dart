@@ -5,6 +5,7 @@ import 'package:flutter_social_media/app/app_routes.dart';
 import 'package:flutter_social_media/app/app_themes.dart';
 import 'package:flutter_social_media/feature/feed/feed_notifier.dart';
 import 'package:flutter_social_media/feature/home/home_notifier.dart';
+import 'package:flutter_social_media/feature/profile/profile_notifier.dart';
 import 'package:flutter_social_media/feature/startup/startup_notifier.dart';
 import 'package:provider/provider.dart';
 
@@ -18,6 +19,7 @@ class App extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => StartupNotifier()),
         ChangeNotifierProvider(create: (context) => HomeNotifier()),
         ChangeNotifierProvider(create: (context) => FeedNotifier()),
+        ChangeNotifierProvider(create: (context) => ProfileNotifier()),
       ],
       child: ScreenUtilInit(
         minTextAdapt: true,
