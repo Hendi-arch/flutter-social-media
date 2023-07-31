@@ -3,6 +3,7 @@ import 'package:flutter_social_media/entity/base_entity.dart';
 import 'package:flutter_social_media/feature/home/home_notifier.dart';
 import 'package:flutter_social_media/shared/components/list_screen_shimmer_loading.dart';
 import 'package:flutter_social_media/shared/components/list_tile_shimmer_component.dart';
+import 'package:flutter_social_media/shared/components/user_shimmer_component.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -65,7 +66,7 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Text(error.stateDescription),
           ),
         ),
-        loading: () => const ListScreenShimmerComponent(),
+        loading: () => const ListScreenShimmerComponent(featureShimmerComponent: UserShimmerComponent()),
       ),
     );
   }

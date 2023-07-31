@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_social_media/feature/feed/feed_screen.dart';
 import 'package:flutter_social_media/feature/home/home_screen.dart';
 
 class MainScreen extends StatefulWidget {
@@ -17,7 +18,7 @@ class _MainScreenState extends State<MainScreen> {
     },
     {
       'title': 'Posts',
-      'feature': Container(color: Colors.green, key: const ValueKey(1)),
+      'feature': const FeedScreen(key: ValueKey(1)),
     },
     {
       'title': 'Your Like',

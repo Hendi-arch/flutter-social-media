@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_social_media/feature/404/not_found_screen.dart';
 import 'package:flutter_social_media/feature/favorite/favorite_screen.dart';
-import 'package:flutter_social_media/feature/feed/feed_screen.dart';
 import 'package:flutter_social_media/feature/main/main_screen.dart';
 import 'package:flutter_social_media/feature/profile/profile_screen.dart';
 import 'package:flutter_social_media/feature/startup/startup_screen.dart';
@@ -9,7 +8,6 @@ import 'package:flutter_social_media/feature/startup/startup_screen.dart';
 class AppRoutes {
   static const String startup = "/";
   static const String home = "/home";
-  static const String feed = "/feed";
   static const String favorite = "/favorite";
   static const String profile = "/profile";
 
@@ -23,8 +21,6 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => const StartupScreen());
       case home:
         return MaterialPageRoute(builder: (_) => const MainScreen());
-      case feed:
-        return MaterialPageRoute(builder: (_) => const FeedScreen());
       case favorite:
         return MaterialPageRoute(builder: (_) => const FavoriteScreen());
       case profile:

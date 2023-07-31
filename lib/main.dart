@@ -5,7 +5,7 @@ import 'package:loggy/loggy.dart';
 void main() {
   /// Initialize logger
   Loggy.initLoggy(
-    logPrinter: const PrettyPrinter(),
+    logPrinter: const PrettyPrinter(showColors: true),
   );
 
   runApp(const App());

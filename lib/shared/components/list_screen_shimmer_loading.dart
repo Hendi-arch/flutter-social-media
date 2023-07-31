@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
 class ListScreenShimmerComponent extends StatelessWidget {
-  const ListScreenShimmerComponent({super.key});
+  final Widget featureShimmerComponent;
+  const ListScreenShimmerComponent(
+      {super.key, required this.featureShimmerComponent});
 
   @override
   Widget build(BuildContext context) {
@@ -12,19 +14,7 @@ class ListScreenShimmerComponent extends StatelessWidget {
       child: ListView.builder(
         itemCount: 20,
         padding: const EdgeInsets.all(15),
-        itemBuilder: (context, index) {
-          return ListTile(
-            leading: const CircleAvatar(),
-            title: Container(
-              height: 12.0,
-              color: Colors.white,
-            ),
-            subtitle: Container(
-              height: 12.0,
-              color: Colors.white,
-            ),
-          );
-        },
+        itemBuilder: (context, index) => featureShimmerComponent,
       ),
     );
   }
